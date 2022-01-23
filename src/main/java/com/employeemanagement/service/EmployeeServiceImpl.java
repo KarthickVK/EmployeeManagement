@@ -112,28 +112,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 					employeeData.setEmployeeName(employeeDetails.getEmployeeName());
 
 					EMPLOYEE_MAP.replace(employeeId, employeeData);
-					break;
+				
 				} else if (employeeDetails.getEmployeeSalary() == null && employeeDetails.getEmployeeName() == null
 						&& employeeDetails.getEmployeeDateOfBirth() == null) {
 					employeeData.setEmployeePhoneNo(employeeDetails.getEmployeePhoneNo());
 
 					EMPLOYEE_MAP.replace(employeeId, employeeData);
-					break;
+					
 				} else if (employeeDetails.getEmployeeName() == null && employeeDetails.getEmployeePhoneNo() == null
 						&& employeeDetails.getEmployeeDateOfBirth() == null) {
 					employeeData.setEmployeeSalary(employeeDetails.getEmployeeSalary());
 
 					EMPLOYEE_MAP.replace(employeeId, employeeData);
-					break;
+					
 				} else if (employeeDetails.getEmployeeName() == null && employeeDetails.getEmployeePhoneNo() == null
 						&& employeeDetails.getEmployeeSalary() == null) {
 					employeeData.setEmployeeDateOfBirth(employeeDetails.getEmployeeDateOfBirth());
 
 					EMPLOYEE_MAP.replace(employeeId, employeeData);
-					break;
+					
 				}
 			}
-			break;
 		}
 	}
 
