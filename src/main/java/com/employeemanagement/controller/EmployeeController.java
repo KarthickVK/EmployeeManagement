@@ -1,9 +1,12 @@
 package com.employeemanagement.controller;
 
+import java.util.Date;
+
 import com.employeemanagement.controller.EmployeeController;
 import com.employeemanagement.model.Employee;
 import com.employeemanagement.service.EmployeeService;
 import com.employeemanagement.service.EmployeeServiceImpl;
+import com.employeemanagement.view.EmployeeView;
 
 /**
  * <h1>EmployeeController</h1> This class is used to Control all the request and
@@ -15,10 +18,10 @@ import com.employeemanagement.service.EmployeeServiceImpl;
  */
 
 public class EmployeeController {
-	private EmployeeService employeeService = new EmployeeServiceImpl();
-
+	private static  EmployeeService employeeService = new EmployeeServiceImpl();
+	
 	/**
-	 * this method carry all the user inputs to pass the service part.
+	 * carry all the user inputs to pass the service part.
 	 * 
 	 * @param employeeId the employee's employeeId(key).
 	 * @param employee   the employee's details are stored in this part.
@@ -29,7 +32,7 @@ public class EmployeeController {
 	}
 
 	/**
-	 * this method carry all the user inputs to pass the service part.
+	 * carry all the user inputs to pass the service part.
 	 * 
 	 * @param employeeId      the employee's employeeId(key).
 	 * @param employeeDetails
@@ -40,7 +43,7 @@ public class EmployeeController {
 	}
 
 	/**
-	 * this method is used to pass the values to service part.
+	 * pass the values to service part.
 	 * 
 	 * @param employeeId the employee's employeeId(key).
 	 */
@@ -56,5 +59,56 @@ public class EmployeeController {
 	public void showAllEmployee() {
 		employeeService.showAllEmployee();
 	}
+	
+	/**
+	 * User input is passed to service part.
+	 * 
+	 * @param employeeName
+	 */
+	
+	public static String validateEmployeeName(String employeeName) {
+		return employeeService.validateEmployeeName(employeeName);
+	}
+	
+	/**
+	 * User input is passed to service.
+	 * @param employeePhoneNo
+	 */
+	
+	public static String validateEmployeePhoneNo(String employeePhoneNo) {
+		 return employeeService.validateEmployeePhoneNo(employeePhoneNo);
+	}
+	
+	/**
+	 * User input is passed to service.
+	 * @param employeeDateOfBirth
+	 */
+	
+	public static Date validateEmployeeDateOfBirth(String employeeDateOfBirth) {
+		return employeeService.validateEmployeeDateOfBirth(employeeDateOfBirth);
+ 	}
+	
+	/**
+	 * EmployeeName not match to return view page call.
+	 */
+	
+	public static String backValidateEmployeeName() {
+		return EmployeeView.getEmployeeName();
+	}
+	
+	/**
+	 * EmployeeName not match to return view page call.
+	 */
+	
+	public static String backValidateEmployeePhoneNo() {
+		return EmployeeView.getEmployeePhoneNo();
+	}
 
+	/**
+	 * EmployeeName not match to return view page call.
+	 */
+
+	public static Date backValidateEmployeeDateOfBirth() {
+		return EmployeeView.getEmployeeDateOfBirth();
+	}
 }

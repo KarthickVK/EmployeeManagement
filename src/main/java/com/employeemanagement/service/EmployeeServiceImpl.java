@@ -4,71 +4,70 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.employeemanagement.main.EmployeeMain;
+import com.employeemanagement.controller.EmployeeController;
 import com.employeemanagement.model.Employee;
 import com.employeemanagement.view.EmployeeView;
 
 /**
- * this class is implements EmployeeService interface. EmployeeService interface
- * methods are implemented in this part. in this class implementation are not
- * show in a user. Hiding a background details only show in a functionality to
- * the user.
+ * This class is implements EmployeeService interface. EmployeeService interface
+ * methods are implemented in this part. Hiding a background details only show
+ * in a functionality to the user.
  * 
  * @author KarthickV
  */
 
 public class EmployeeServiceImpl implements EmployeeService {
 	private final Map<String, Employee> EMPLOYEE_MAP = new HashMap<>();
-
+	
 	/**
-	 * this method is used to validate the employeeName.
+	 * Validate the employeeName.
 	 * 
 	 * @param employeeName the employee's employeeName.
 	 * @return String
 	 */
 
-	public static String validateEmployeeName(String employeeName) {
+	public String validateEmployeeName(String employeeName) {
 		Pattern pattern = Pattern.compile("[a-zA-Z\\s]*$");
 		Matcher match = pattern.matcher(employeeName);
 
 		if (!(match.find() && match.group().equals(employeeName))) {
 			System.out.println("Invalid, Please enter a valid Name");
-			return EmployeeView.getEmployeeName();
+			return EmployeeController.backValidateEmployeeName();
 		}
 		return employeeName;
+		
 	}
 
 	/**
-	 * this method is used to validate the employeePhoneNo.
+	 * Validate the employeePhoneNo.
 	 * 
 	 * @param employeePhoneNo the employee's employeePhoneno
 	 * @return string
 	 */
 
-	public static String validatePhoneNo(String employeePhoneNo) {
+	public String validateEmployeePhoneNo(String employeePhoneNo) {
 		Pattern pattern = Pattern.compile("(0|91)?[6-9][0-9]{9}");
 		Matcher match = pattern.matcher(employeePhoneNo);
 
 		if (!(match.find() && match.group().equals(employeePhoneNo))) {
 			System.out.println("Please enter a valid phone number");
-			return EmployeeView.getEmployeePhoneNo();
+			return EmployeeController.backValidateEmployeePhoneNo();
 		}
 		return employeePhoneNo;
 	}
 
 	/**
-	 * this method is used to validate the employeeDateOfBirth.
+	 * Validate the employeeDateOfBirth.
 	 * 
 	 * @param employeeDateOfBirth
 	 * @return Date
 	 */
 
-	public static Date validateDate(String employeeDateOfBirth) {
+	public Date validateEmployeeDateOfBirth(String employeeDateOfBirth) {
 		try {
 			LocalDate date = LocalDate.parse(employeeDateOfBirth);
 			LocalDate todayDate = LocalDate.now().plusDays(1);
@@ -78,14 +77,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 		} catch (Exception exception) {
 			System.out.println("Date Is Invalid");
-			return EmployeeView.getEmployeeDateOfBirth();
+			return EmployeeController.backValidateEmployeeDateOfBirth();
 		}
 		return EmployeeView.getEmployeeDateOfBirth();
 	}
 
 	/**
-	 * this method used to EmployeeDetails are added to the Employee_Map. then the
-	 * value is stored base on key.
+	 * EmployeeDetails are added to the Employee_Map. 
 	 */
 
 	public void createEmployee(String employeeId, Employee employee) {
@@ -93,56 +91,51 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	/**
-	 * this method used to update the employeeDetails in Employee_Map. then iterator
-	 * the Employee_Map. employeeID is key .then the key based update are required.
-	 * user can any details are updated.
+	 * Update the employeeDetails in Employee_Map.
 	 */
 
 	public void updateEmployee(String employeeId, Employee employeeDetails) {
-		Iterator<String> iterator = EMPLOYEE_MAP.keySet().iterator();
+		Employee employeeData=EMPLOYEE_MAP.get(employeeId);
+		
+			if (EMPLOYEE_MAP.containsKey(employeeId)) {
 
-		while (iterator.hasNext()) {
-			String employeeKey = iterator.next();
-			Employee employeeData = EMPLOYEE_MAP.get(employeeKey);
-
-			if (employeeKey.equals(employeeId)) {
-
-				if (employeeDetails.getEmployeeSalary() == null && employeeDetails.getEmployeePhoneNo() == null
-						&& employeeDetails.getEmployeeDateOfBirth() == null) {
-					employeeData.setEmployeeName(employeeDetails.getEmployeeName());
-
-					EMPLOYEE_MAP.replace(employeeId, employeeData);
-				} else if (employeeDetails.getEmployeeSalary() == null && employeeDetails.getEmployeeName() == null
-						&& employeeDetails.getEmployeeDateOfBirth() == null) {
+				if (employeeDetails.getEmployeeName() != null) {
+					 employeeData.setEmployeeName(employeeDetails.getEmployeeName());
+					 
+					EMPLOYEE_MAP.putIfAbsent(employeeId, employeeData);
+				} else if (employeeDetails.getEmployeePhoneNo() != null) {
 					employeeData.setEmployeePhoneNo(employeeDetails.getEmployeePhoneNo());
 
 					EMPLOYEE_MAP.replace(employeeId, employeeData);
-				} else if (employeeDetails.getEmployeeName() == null && employeeDetails.getEmployeePhoneNo() == null
-						&& employeeDetails.getEmployeeDateOfBirth() == null) {
+				} else if (employeeDetails.getEmployeeSalary() != null) {
 					employeeData.setEmployeeSalary(employeeDetails.getEmployeeSalary());
 
 					EMPLOYEE_MAP.replace(employeeId, employeeData);
-				} else if (employeeDetails.getEmployeeName() == null && employeeDetails.getEmployeePhoneNo() == null
-						&& employeeDetails.getEmployeeSalary() == null) {
+				} else if (employeeDetails.getEmployeeDateOfBirth() != null) {
 					employeeData.setEmployeeDateOfBirth(employeeDetails.getEmployeeDateOfBirth());
 
 					EMPLOYEE_MAP.replace(employeeId, employeeData);
 				}
+				}else {
+				System.out.println("Key not match");
 			}
-		}
+	}
+	
+
+		/**
+		 * Delete the selected employee details.
+		 */
+
+		public void deleteEmployee(String employeeId) {
+			if (EMPLOYEE_MAP.containsKey(employeeId)) {
+				EMPLOYEE_MAP.remove(employeeId);
+			} else {
+				System.out.println("Key not match");
+			}
 	}
 
 	/**
-	 * this method used to delete the selected employee details.
-	 */
-
-	public void deleteEmployee(String employeeId) {
-		EMPLOYEE_MAP.remove(employeeId);
-	}
-
-	/**
-	 * this method is used to show all the employee details one bye one .
-	 * 
+	 * Show all the employee details one bye one .
 	 */
 
 	public void showAllEmployee() {
