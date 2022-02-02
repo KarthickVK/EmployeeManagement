@@ -3,112 +3,64 @@ package com.employeemanagement.controller;
 import java.util.Date;
 
 import com.employeemanagement.controller.EmployeeController;
+import com.employeemanagement.exception.InvalidIdException;
 import com.employeemanagement.model.Employee;
 import com.employeemanagement.service.EmployeeService;
 import com.employeemanagement.service.EmployeeServiceImpl;
+import com.employeemanagement.service.EmployeeServiceImplVersion2;
 import com.employeemanagement.view.EmployeeView;
 
 /**
  * <h1>EmployeeController</h1> This class is used to Control all the request and
- * response. Then controller collect the all the user details . then the details
- * are transfer to service interface. then the service response is collected and
- * transfer the user view page.
+ * response. Then controller collect the all the user details .
  * 
  * @author KarthickV
  */
-
 public class EmployeeController {
-	private static  EmployeeService employeeService = new EmployeeServiceImpl();
-	
-	/**
-	 * carry all the user inputs to pass the service part.
-	 * 
-	 * @param employeeId the employee's employeeId(key).
-	 * @param employee   the employee's details are stored in this part.
-	 */
+	private static final EmployeeService EMPLOYEE_SERVICE = new EmployeeServiceImpl();
+	private static final EmployeeServiceImplVersion2 EMPLOYEE_SERVICE_IMPL_VERSION2 = new EmployeeServiceImplVersion2();
 
-	public void createEmployee(String employeeId, Employee employee) {
-		employeeService.createEmployee(employeeId, employee);
+	public void createEmployee(Employee employee) {
+		EMPLOYEE_SERVICE.createEmployee(employee);
+		EMPLOYEE_SERVICE_IMPL_VERSION2.createEmployee(employee);
 	}
 
-	/**
-	 * carry all the user inputs to pass the service part.
-	 * 
-	 * @param employeeId      the employee's employeeId(key).
-	 * @param employeeDetails
-	 */
-
-	public void updateEmployee(String employeeId, Employee employeeDetails) {
-		employeeService.updateEmployee(employeeId, employeeDetails);
+	public void updateEmployee(Employee employeeDetails) throws InvalidIdException {
+		EMPLOYEE_SERVICE_IMPL_VERSION2.updateEmployee(employeeDetails);
+		EMPLOYEE_SERVICE.updateEmployee(employeeDetails);
 	}
 
-	/**
-	 * pass the values to service part.
-	 * 
-	 * @param employeeId the employee's employeeId(key).
-	 */
-
-	public void deleteEmployee(String employeeId) {
-		employeeService.deleteEmployee(employeeId);
+	public void deleteEmployee(String employeeId) throws InvalidIdException {
+		EMPLOYEE_SERVICE_IMPL_VERSION2.deleteEmployee(employeeId);
+		EMPLOYEE_SERVICE.deleteEmployee(employeeId);
 	}
 
-	/**
-	 * all employeeDetails are passed to the service part.
-	 */
-
-	public void showAllEmployee() {
-		employeeService.showAllEmployee();
+	public void getAllEmployee() {
+		EMPLOYEE_SERVICE.showAllEmployee();
+		EMPLOYEE_SERVICE_IMPL_VERSION2.showAllEmployee();
 	}
-	
-	/**
-	 * User input is passed to service part.
-	 * 
-	 * @param employeeName
-	 */
-	
+
 	public static String validateEmployeeName(String employeeName) {
-		return employeeService.validateEmployeeName(employeeName);
+		return EMPLOYEE_SERVICE.validateEmployeeName(employeeName);
 	}
-	
-	/**
-	 * User input is passed to service.
-	 * @param employeePhoneNo
-	 */
-	
+
 	public static String validateEmployeePhoneNo(String employeePhoneNo) {
-		 return employeeService.validateEmployeePhoneNo(employeePhoneNo);
+		return EMPLOYEE_SERVICE.validateEmployeePhoneNo(employeePhoneNo);
 	}
-	
-	/**
-	 * User input is passed to service.
-	 * @param employeeDateOfBirth
-	 */
-	
+
 	public static Date validateEmployeeDateOfBirth(String employeeDateOfBirth) {
-		return employeeService.validateEmployeeDateOfBirth(employeeDateOfBirth);
- 	}
-	
-	/**
-	 * EmployeeName not match to return view page call.
-	 */
-	
-	public static String backValidateEmployeeName() {
+		return EMPLOYEE_SERVICE.validateEmployeeDateOfBirth(employeeDateOfBirth);
+	}
+
+	public static String returnToValidateEmployeeName() {
 		return EmployeeView.getEmployeeName();
 	}
-	
-	/**
-	 * EmployeeName not match to return view page call.
-	 */
-	
-	public static String backValidateEmployeePhoneNo() {
+
+	public static String returnToValidateEmployeePhoneNo() {
 		return EmployeeView.getEmployeePhoneNo();
 	}
 
-	/**
-	 * EmployeeName not match to return view page call.
-	 */
-
-	public static Date backValidateEmployeeDateOfBirth() {
+	public static Date returnToValidateEmployeeDateOfBirth() {
 		return EmployeeView.getEmployeeDateOfBirth();
 	}
 }

@@ -11,7 +11,6 @@ import com.employeemanagement.main.EmployeeMain;
  * 
  * @author KarthickV
  */
-
 public class EmployeeView {
 
 	/**
@@ -19,7 +18,6 @@ public class EmployeeView {
 	 * 
 	 * @return String
 	 */
-
 	public static String getEmployeeId() {
 		System.out.println("Enter the employeeId:");
 		return EmployeeMain.SCANNER.nextLine();
@@ -30,12 +28,9 @@ public class EmployeeView {
 	 * 
 	 * @return String
 	 */
-
 	public static String getEmployeeName() {
 		System.out.println("Enter the employeeName:");
-		
 		return EmployeeController.validateEmployeeName(EmployeeMain.SCANNER.nextLine());
-		
 	}
 
 	/**
@@ -43,7 +38,6 @@ public class EmployeeView {
 	 * 
 	 * @return String
 	 */
-
 	public static String getEmployeePhoneNo() {
 		System.out.println("Enter the employeePhoneNo:");
 		return EmployeeController.validateEmployeePhoneNo(EmployeeMain.SCANNER.nextLine());
@@ -54,7 +48,6 @@ public class EmployeeView {
 	 * 
 	 * @return String
 	 */
-
 	public static String getEmployeeSalary() {
 		System.out.println("Enter the employeeSalary:");
 		return EmployeeMain.SCANNER.nextLine();
@@ -63,7 +56,6 @@ public class EmployeeView {
 	/**
 	 * Get EmployeeDateOfBirth to the user.
 	 */
-
 	public static Date getEmployeeDateOfBirth() {
 		System.out.println("Enter the employeeDateOfBirth(yyyy-MM-dd)");
 		return EmployeeController.validateEmployeeDateOfBirth(EmployeeMain.SCANNER.nextLine());
@@ -74,7 +66,6 @@ public class EmployeeView {
 	 * 
 	 * @return String
 	 */
-
 	public static String chooseChoice() {
 		System.out.println(
 				"a.EmployeeName \nb.EmployeePhoneNo \nc.EmployeeSalary \nd.EmployeeDateOfBirth \nEnter your choice");

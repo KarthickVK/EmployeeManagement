@@ -1,14 +1,22 @@
 package com.employeemanagement.dao;
 
+import java.util.List;
+
 import com.employeemanagement.model.Employee;
 
+/**
+ * <h1>EmployeeDao</h1>
+ * Employee Data Object.
+ * 
+ * @author KarthickV
+ */
 public interface EmployeeDao {
 
-	public void createEmployee(Employee employee);
+	void createEmployee(Employee employee);
 
-	public void updateEmployee(Employee employeeDetails);
+	void updateEmployee(Employee employeeDetails);
 
-	public void deleteEmployee(String employeeId);
+	void deleteEmployee(String employeeId);
 
-	public void showAllEmployee();
+    List<String> getAllEmployee();
 }

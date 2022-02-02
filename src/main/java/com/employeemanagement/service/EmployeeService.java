@@ -2,27 +2,27 @@ package com.employeemanagement.service;
 
 import java.util.Date;
 
+import com.employeemanagement.exception.InvalidIdException;
 import com.employeemanagement.model.Employee;
 
 /**
- * This is a interface then the interface is accepted the controller request.
- * Then only in a method declaration not implementation in thin part.
+ * <h1>EmployeeService</h1> Then only in a method declaration not implementation
+ * in thin part.
  * 
  * @author KarthickV
  */
-
 public interface EmployeeService {
-	public void createEmployee(String employeeId, Employee employee);
+	void createEmployee(Employee employee);
 
-	public void updateEmployee(String employeeId, Employee employeeDetails);
+	void updateEmployee(Employee employeeDetails) throws InvalidIdException;
 
-	public void deleteEmployee(String employeeId);
+	void deleteEmployee(String employeeId) throws InvalidIdException;
 
-	public void showAllEmployee();
-	
-	public  String validateEmployeeName(String employeeName); 
-	
-	public String validateEmployeePhoneNo(String employeePhoneNo);
-	
-	public Date validateEmployeeDateOfBirth(String employeeDateOfBirth);
+	void showAllEmployee();
+
+	String validateEmployeeName(String employeeName);
+
+	String validateEmployeePhoneNo(String employeePhoneNo);
+
+	Date validateEmployeeDateOfBirth(String employeeDateOfBirth);
 }

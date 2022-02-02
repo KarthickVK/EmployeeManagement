@@ -7,7 +7,6 @@ import java.util.Date;
  * 
  * @author KarthickV
  */
-
 public class Employee {
 	private String employeeId;
 	private String employeeName;
@@ -19,26 +18,28 @@ public class Employee {
 		super();
 	}
 
-	public Employee(String employeeId,String employeeName, String employeePhoneNo, String employeeSalary, Date employeeDateOfBirth) {
-		this.employeeId= employeeId;
+	public Employee(String employeeId, String employeeName, String employeePhoneNo, String employeeSalary,
+			Date employeeDateOfBirth) {
+		this.employeeId = employeeId;
 		this.employeeName = employeeName;
 		this.employeePhoneNo = employeePhoneNo;
 		this.employeeSalary = employeeSalary;
 		this.employeeDateOfBirth = employeeDateOfBirth;
 	}
-	
-    public String getEmployeeId() {
-	    return employeeId;
-    }
-    
-    public void setEmployeeId(String employeeId) {
-	    this.employeeId = employeeId;
-    }
 
- 	public String getEmployeeName() {
+	
+	public String getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public String getEmployeeName() {
 		return employeeName;
 	}
-	
+
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
 	}
@@ -46,7 +47,7 @@ public class Employee {
 	public String getEmployeePhoneNo() {
 		return employeePhoneNo;
 	}
-	
+
 	public void setEmployeePhoneNo(String employeePhoneNo) {
 		this.employeePhoneNo = employeePhoneNo;
 	}
@@ -54,11 +55,11 @@ public class Employee {
 	public String getEmployeeSalary() {
 		return employeeSalary;
 	}
-	
+
 	public void setEmployeeSalary(String employeeSalary) {
 		this.employeeSalary = employeeSalary;
 	}
-	
+
 	public Date getEmployeeDateOfBirth() {
 		return employeeDateOfBirth;
 	}
@@ -70,9 +71,8 @@ public class Employee {
 	/**
 	 * Display the employee details.
 	 */
-	
 	public String toString() {
-		String string = String.format("%-20s%-20s%-20s%-20s%-20s%-20%t", employeeId, employeeName, employeePhoneNo,
+		final String string = String.format("%-20s%-20s%-20s%-20s%-20s%-20%t", employeeId, employeeName, employeePhoneNo,
 				employeeSalary, employeeDateOfBirth);
 		return string;
 	}

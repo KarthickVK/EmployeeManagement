@@ -2,127 +2,111 @@ package com.employeemanagement.dao;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.employeemanagement.model.Employee;
 
+/**
+ * <h1>EmployeeDaoImpl</h1>
+ * 
+ * @author KarthickV
+ */
 public class EmployeeDaoImpl implements EmployeeDao {
-	private static String dbhost = "jdbc:mysql://localhost:3306/databasedb";
-	private static String username = "root";
-	private static String password = "Karthi33";
-	private static Connection connection;
 
-	public static Connection getConnection() {
-
-		try {
-			connection = DriverManager.getConnection(dbhost, username, password);
-		} catch (Exception exception) {
-			System.out.println("Cannot create database connection");
-		}
-		return connection;
-	}
-
+	/**
+	 * Create the mySql insert statement.
+	 */
 	public void createEmployee(Employee employee) {
+		final String query = "insert into employeedetails (employeeId,employeeName, employeePhoneNo, employeeSalary, employeeDateOfBirth, isactive) values (?, ?, ?, ?, ?, true)";
 
-		try {
-			Connection connection = getConnection();
-			Date startDate = new Date(employee.getEmployeeDateOfBirth().getTime());
-			String query = "insert into employeedetails (employeeId,employeeName,employeePhoneNo,employeeSalary,employeeDateOfBirth) values (?,?,?,?,?)";
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
+		try (final Connection connection = ConnectDataBase.getConnection();
+				final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			final Date startDate = new Date(employee.getEmployeeDateOfBirth().getTime());
 
 			preparedStatement.setString(1, employee.getEmployeeId());
 			preparedStatement.setString(2, employee.getEmployeeName());
 			preparedStatement.setString(3, employee.getEmployeePhoneNo());
 			preparedStatement.setString(4, employee.getEmployeeSalary());
 			preparedStatement.setDate(5, startDate);
-			preparedStatement.executeUpdate();
 
+			preparedStatement.executeUpdate();
 		} catch (Exception exception) {
-			System.out.println("Data not Added");
+			System.out.println("DATA NOT INSERTED");
 		}
 	}
 
+	/**
+	 * Create the mySql update statement.
+	 */
 	public void updateEmployee(Employee employeeDetails) {
+		String query = "update employeedetails set";
 
-		try {
-			Connection connection = getConnection();
-			String query = "update employeedetails set employeeName=?,employeePhoneNo=?,employeeSalary=?,EmployeeDateOfBirth=? where employeeId=?";
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			
+		try (final Connection connection = ConnectDataBase.getConnection();
+				final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
 			if (employeeDetails.getEmployeeName() != null) {
-				//String query = "update employeedetails set employeeName=? where employeeId=?";
-			//	PreparedStatement preparedStatement = connection.prepareStatement(query);
-				preparedStatement.setString(1, employeeDetails.getEmployeeName());
-				preparedStatement.setString(5, employeeDetails.getEmployeeId());
-				preparedStatement.executeUpdate();
+				query = query + " employeeName = '" + employeeDetails.getEmployeeName() + "'";
 			} else if (employeeDetails.getEmployeePhoneNo() != null) {
-			//	String query = "update employeedetails set employeePhoneNo=? where employeeId=?";
-			//	PreparedStatement preparedStatement = connection.prepareStatement(query);
-				preparedStatement.setString(2, employeeDetails.getEmployeePhoneNo());
-				preparedStatement.setString(5, employeeDetails.getEmployeeId());
-				preparedStatement.executeUpdate();
+				query = query + " employeePhoneNo = '" + employeeDetails.getEmployeePhoneNo() + "'";
 			} else if (employeeDetails.getEmployeeSalary() != null) {
-				//String query = "update employeedetails set employeeSalary=? where employeeId=?";
-				//PreparedStatement preparedStatement = connection.prepareStatement(query);
-				preparedStatement.setString(3, employeeDetails.getEmployeeSalary());
-				preparedStatement.setString(5, employeeDetails.getEmployeeId());
-				preparedStatement.executeUpdate();
+				query = query + " employeeSalary = '" + employeeDetails.getEmployeeSalary() + "'";
 			} else if (employeeDetails.getEmployeeDateOfBirth() != null) {
-				//String query = "update employeedetails set employeeDateOfBirth=? where employeeId=?";
-			//	PreparedStatement preparedStatement = connection.prepareStatement(query);
 				Date startDate = new Date(employeeDetails.getEmployeeDateOfBirth().getTime());
-				preparedStatement.setDate(4, startDate);
-				preparedStatement.setString(5, employeeDetails.getEmployeeId());
-				preparedStatement.executeUpdate();
+				query = query + " employeeDateOfBirth = '" + startDate + "'";
 			}
+			query = query + "where employeeId= '" + employeeDetails.getEmployeeId() + "'";
 
-		} catch (Exception e) {
-			System.out.println("Record not Updated");
-		}
-
-	}
-
-	public void deleteEmployee(String employeeId) {
-		try {
-			Connection connection = getConnection();
-			String query = "delete from employeedetails where id=?";
-			PreparedStatement preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, employeeId);
-			preparedStatement.executeUpdate();
-			connection.close();
+			preparedStatement.executeUpdate(query);
 		} catch (Exception exception) {
-			System.out.println("Data not Deleted");
+			System.out.println("DATA NOT UPDATED");
 		}
 	}
 
-	public void showAllEmployee() {
-		try {
-			Map<String, Employee> map = new HashMap<>();
+	/**
+	 * Create the mySql delete statement.
+	 */
+	public void deleteEmployee(String employeeId) {
+		final String query = "update employeedetails set isactive = false where employeeId = ?";
 
-			Connection connection = getConnection();
-			Statement preparedStatement = connection.createStatement();
-			String query = "select * from employeedetails";
-			ResultSet resultSet = preparedStatement.executeQuery(query);
+		try (final Connection connection = ConnectDataBase.getConnection();
+				final PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setString(1, employeeId);
+			
+			preparedStatement.executeUpdate();
+		} catch (Exception exception) {
+			System.out.println("ID NOT FOUND");
+		}
+	}
+
+	/**
+	 * Create the mySql select statement.
+	 */
+	public List<String> getAllEmployee() {
+		final List<String> list = new ArrayList<String>();
+		final String query = "select * from employeedetails where isactive = true";
+
+		try (final Connection connection = ConnectDataBase.getConnection();
+				final Statement statement = connection.createStatement();
+				final ResultSet resultSet = statement.executeQuery(query)) {
+			final ResultSetMetaData metadata = resultSet.getMetaData();
+			final int count = metadata.getColumnCount();
 
 			while (resultSet.next()) {
-				String employeeId = resultSet.getString("employeeId");
-				String employeeName = resultSet.getString("employeeName");
-				String employeePhoneNo = resultSet.getString("employeePhoneNo");
-				String employeeSalary = resultSet.getString("employeeSalary");
-				Date employeeDateOfBirth = resultSet.getDate("employeeDateOfBirth");
-				Employee employee = new Employee(employeeId, employeeName, employeePhoneNo, employeeSalary,
-						employeeDateOfBirth);
 
-				map.put(employee.getEmployeeId(), employee);
+				for (int i = 1; i <= count; i++) {
+					final String employee = resultSet.getString(i) + " ";
+
+					list.add(employee);
+				}
 			}
-			System.out.println(map);
-		} catch (Exception e) {
-			System.out.println("Data not Show");
+		} catch (Exception exception) {
+			System.out.println("ID NOT FOUND");
 		}
+		return list;
 	}
 }

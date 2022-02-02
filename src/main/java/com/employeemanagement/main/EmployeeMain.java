@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 import com.employeemanagement.controller.EmployeeController;
+import com.employeemanagement.exception.InvalidIdException;
 import com.employeemanagement.model.Employee;
 import com.employeemanagement.view.EmployeeView;
 
@@ -13,142 +14,171 @@ import com.employeemanagement.view.EmployeeView;
  * 
  * @author KarthickV
  */
-
 public class EmployeeMain {
 	public static final Scanner SCANNER = new Scanner(System.in);
-	public static EmployeeController employeeController = new EmployeeController();
+	private static final EmployeeController EMPLOYEE_CONTROLLER = new EmployeeController();
 
 	/**
 	 * Which makes use of create,update,delete and show the employeeDetail.
 	 * 
 	 * @param args unused.
 	 * @return nothing.\
+	 * @throws InvalidIdException
 	 */
-
 	public static void main(String[] args) {
 		String userChoice;
 
 		do {
 			System.out.println("a.CREATE \nb.UPDATE \nc.DELETE \nd.SHOW \nEnter your choice");
-			String choice = SCANNER.nextLine();
+			final String choice = SCANNER.nextLine();
 
-			if ("a".equals(choice)) {
+			if ("a".equalsIgnoreCase(choice)) {
 				createEmployee();
-			} else if ("b".equals(choice)) {
+			} else if ("b".equalsIgnoreCase(choice)) {
 				updateEmployee();
-			} else if ("c".equals(choice)) {
+			} else if ("c".equalsIgnoreCase(choice)) {
 				deleteEmployee();
-			} else if ("d".equals(choice)) {
-				showAllEmployee();
+			} else if ("d".equalsIgnoreCase(choice)) {
+				getAllEmployee();
 			}
 			System.out.println("Do you need to Continue?");
 			userChoice = SCANNER.nextLine();
-		} while ("y".equals(userChoice) || "Y".equals(userChoice));
+		} while ("y".equalsIgnoreCase(userChoice));
 	}
 
 	/**
 	 * Collect all the user input to stored the separated variables.
 	 */
-
 	private static void createEmployee() {
-		String employeeId = EmployeeView.getEmployeeId();
-		String employeeName = EmployeeView.getEmployeeName();
-		String employeePhoneNo = EmployeeView.getEmployeePhoneNo();
-		String salary = EmployeeView.getEmployeeSalary();
-		Date employeeDateOfBirth = EmployeeView.getEmployeeDateOfBirth();
-		Employee employee = new Employee(employeeId, employeeName, employeePhoneNo, salary, employeeDateOfBirth);
+		final String employeeId = EmployeeView.getEmployeeId();
+		final String employeeName = EmployeeView.getEmployeeName();
+		final String employeePhoneNo = EmployeeView.getEmployeePhoneNo();
+		final String salary = EmployeeView.getEmployeeSalary();
+		final Date employeeDateOfBirth = EmployeeView.getEmployeeDateOfBirth();
+		final Employee employee = new Employee(employeeId, employeeName, employeePhoneNo, salary, employeeDateOfBirth);
 
-		employeeController.createEmployee(employeeId, employee);
+		EMPLOYEE_CONTROLLER.createEmployee(employee);
 	}
 
 	/**
-	 * Update EmployeeDetails. Then which detail are updated to user to choice any
-	 * one properties. Then user choose the one properties to call the related
+	 * Update EmployeeDetails.Then user choose the one properties to call the related
 	 * method.
+	 * 
+	 * @throws InvalidIdException
 	 */
-
 	private static void updateEmployee() {
-		String choice = EmployeeView.chooseChoice();
+		final String choice = EmployeeView.chooseChoice();
 
-		if ("a".equals(choice)) {
+		if ("a".equalsIgnoreCase(choice)) {
 			updateEmployeeName();
-		} else if ("b".equals(choice)) {
+		} else if ("b".equalsIgnoreCase(choice)) {
 			updateEmployeePhoneNo();
-		} else if ("c".equals(choice)) {
+		} else if ("c".equalsIgnoreCase(choice)) {
 			updateEmployeeSalary();
-		} else if ("d".equals(choice)) {
+		} else if ("d".equalsIgnoreCase(choice)) {
 			updateEmployeeDateOfBirth();
 		}
 	}
 
 	/**
-	 * User choose update the employeeName then call this method.
+	 * Update employeeName.
+	 * 
+	 * @throws InvalidIdException
 	 */
-
 	private static void updateEmployeeName() {
-		String employeeId = EmployeeView.getEmployeeId();
-		String employeeName = EmployeeView.getEmployeeName();
-		Employee employeeDetails = new Employee();
+		final String employeeId = EmployeeView.getEmployeeId();
+		final String employeeName = EmployeeView.getEmployeeName();
+		final Employee employeeDetails = new Employee();
 
+		employeeDetails.setEmployeeId(employeeId);
 		employeeDetails.setEmployeeName(employeeName);
-		employeeController.updateEmployee(employeeId, employeeDetails);
+
+		try {
+			EMPLOYEE_CONTROLLER.updateEmployee(employeeDetails);
+		} catch (InvalidIdException exception) {
+			System.out.println(exception);
+		}
 	}
 
 	/**
-	 * User choose update the employeeDateOfBirth then call this method.
+	 * Update employeeDateOfBirth.
+	 * 
+	 * @throws InvalidIdException
 	 */
-
 	private static void updateEmployeeDateOfBirth() {
-		String employeeId = EmployeeView.getEmployeeId();
-		Date employeeDateOfBirth = EmployeeView.getEmployeeDateOfBirth();
-		Employee employeeDetails = new Employee();
+		final String employeeId = EmployeeView.getEmployeeId();
+		final Date employeeDateOfBirth = EmployeeView.getEmployeeDateOfBirth();
+		final Employee employeeDetails = new Employee();
 
+		employeeDetails.setEmployeeId(employeeId);
 		employeeDetails.setEmployeeDateOfBirth(employeeDateOfBirth);
-		employeeController.updateEmployee(employeeId, employeeDetails);
+
+		try {
+			EMPLOYEE_CONTROLLER.updateEmployee(employeeDetails);
+		} catch (InvalidIdException exception) {
+			System.out.println(exception);
+		}
 	}
 
 	/**
-	 * User choose update the employeeSalary then call this method.
+	 * Update employeeSalary.
+	 * 
+	 * @throws InvalidIdException
 	 */
-
 	private static void updateEmployeeSalary() {
-		String employeeId = EmployeeView.getEmployeeId();
-		String salary = EmployeeView.getEmployeeSalary();
-		Employee employeeDetails = new Employee();
+		final String employeeId = EmployeeView.getEmployeeId();
+		final String salary = EmployeeView.getEmployeeSalary();
+		final Employee employeeDetails = new Employee();
 
+		employeeDetails.setEmployeeId(employeeId);
 		employeeDetails.setEmployeeSalary(salary);
-		employeeController.updateEmployee(employeeId, employeeDetails);
+
+		try {
+			EMPLOYEE_CONTROLLER.updateEmployee(employeeDetails);
+		} catch (InvalidIdException exception) {
+			System.out.println(exception);
+		}
 	}
 
 	/**
-	 * User choose update the employeePhoneno then call this method.
+	 * Update employeePhoneNo.
+	 * 
+	 * @throws InvalidIdException
 	 */
-
 	private static void updateEmployeePhoneNo() {
-		String employeeId = EmployeeView.getEmployeeId();
-		String employeePhoneNo = EmployeeView.getEmployeePhoneNo();
-		Employee employeeDetails = new Employee();
+		final String employeeId = EmployeeView.getEmployeeId();
+		final String employeePhoneNo = EmployeeView.getEmployeePhoneNo();
+		final Employee employeeDetails = new Employee();
 
+		employeeDetails.setEmployeeId(employeeId);
 		employeeDetails.setEmployeePhoneNo(employeePhoneNo);
-		employeeController.updateEmployee(employeeId, employeeDetails);
+
+		try {
+			EMPLOYEE_CONTROLLER.updateEmployee(employeeDetails);
+		} catch (InvalidIdException exception) {
+			System.out.println(exception);
+		}
 	}
 
 	/**
-	 * Need to user which employeeDetail are delete. then to collect the key to
-	 * user. then this method is passed to controller class.
+	 * Delete employeeDetail. 
+	 *  
+	 * @throws InvalidIdException
 	 */
-
 	private static void deleteEmployee() {
-		String employeeId = EmployeeView.getEmployeeId();
+		final String employeeId = EmployeeView.getEmployeeId();
 
-		employeeController.deleteEmployee(employeeId);
+		try {
+			EMPLOYEE_CONTROLLER.deleteEmployee(employeeId);
+		} catch (InvalidIdException exception) {
+			System.out.println(exception);
+		}
 	}
 
 	/**
 	 * Show all the employeeDetails.
 	 */
-
-	private static void showAllEmployee() {
-		employeeController.showAllEmployee();
+	private static void getAllEmployee() {
+		EMPLOYEE_CONTROLLER.getAllEmployee();
 	}
 }
